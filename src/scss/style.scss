@@ -1,0 +1,31 @@
+// If you want to override variables do it here
+@import "variables";
+
+// Import CoreUI styles
+@import "~@coreui/coreui/scss/coreui.scss";
+
+// Some temp fixes
+@import "fixes";
+
+// If you want to add something do it here
+@import "custom";
+
+.wrapper-class {
+    padding: 1rem;
+    border: 1px solid #d8dbe0;
+}
+
+.editor-class {
+    display: inherit;
+    overflow: auto;
+    background-color:#fff;
+    padding: 1rem;
+    border: 1px solid #d8dbe0;
+    height: 800 !important;
+    min-height: 800;
+    max-height: 800 !important;
+}
+
+.toolbar-class {
+    border: 1px solid #d8dbe0;
+}

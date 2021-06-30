@@ -1,0 +1,14 @@
+.wrapper-class {
+    padding: 1rem;
+    border: 1px solid rgb(126, 120, 120);
+}
+
+.editor-class {
+    background-color:rgb(255, 255, 255);
+    padding: 1rem;
+    border: 1px solid rgb(131, 128, 128);
+}
+
+.toolbar-class {
+    border: 1px solid #ccc;
+}

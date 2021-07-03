@@ -11,7 +11,7 @@ const logout = () => {
 };
 
 const validateUser = () => {
-    return getAPI('/api/users/validate-user', {});
+    return getAPI('/api/auth/validate-user', {});
 };
 
 export default {

@@ -34,12 +34,12 @@ const Login = () => {
 
   const onSubmit = data => {
     const info = pick(data, [
-        'username',
+        'email',
         'password',
     ]);
     setLoading(true);
     data = {
-      username: info.username,
+      email: info.email,
       password: info.password,
     }
     
@@ -47,11 +47,12 @@ const Login = () => {
       .then(res => {
         setLoading(false);
         console.log(res);
-        if (res.status == 201) {
+        if (res.status == 200) {
+          console.log(res.data);
           const role = res.data.user.role;
-          if(role == 2){
+          if(role == "administrator"){
             setAuth(res.data.user);
-            window.localStorage.setItem('token', res.data.accessToken)
+            window.localStorage.setItem('token', res.data.token)
             swal({ title: "Thành công", text: 'Login thành công !', icon: 'success', button: 'Đồng ý' })
             history.push(`/dashboard`);
           }
@@ -79,8 +80,8 @@ const Login = () => {
                     <CFormGroup>
                       <Controller
                         control={control}
-                        id="username"
-                        name="username"
+                        id="email"
+                        name="email"
                         rules={{ 
                           required: 'Vui lòng nhập tên thiết bị !',
                         }}
@@ -92,7 +93,8 @@ const Login = () => {
                               </CInputGroupText>
                             </CInputGroupPrepend>
                             <CInput
-                              placeholder="Tên đăng nhập"
+                              type="email"
+                              placeholder="Email đăng nhập"
                               onChange={e => onChange(e.target.value)}
                               invalid={!!errors.name}
                             />

@@ -26,7 +26,7 @@ const AuthProvider = ({ persistKey = 'auth', children }) => {
         try {
             if (data.status == 200) {
                 console.log(data.data);
-                setAuth(data.data);
+                setAuth(data.data.user);
             }else{
                 setAuth({});
             }

@@ -33,7 +33,7 @@ const fieldsCourses = [
   { key: 'id', label: 'STT', sorter: false, filter: false },
   { key: 'name', label: 'Tên khoá học', sorter: false, filter: false },
   { key: 'categories_id', label: 'Danh mục', _style: { minWidth: '130px' }, sorter: false, filter: false },
-  { key: 'description', label: 'Mô tả', _style: { minWidth: '130px' }, sorter: false, filter: false },
+  { key: 'overview', label: 'Tổng quan', _style: { minWidth: '130px' }, sorter: false, filter: false },
   { key: 'lecturer_id', label: 'Giáo viên' },
   { key: 'is_published', label: 'Trạng thái', _style: { minWidth: '100px' }, filter: false },
   { key: 'actions', label: 'Hoạt động', _style: { minWidth: '50px' }, filter: false },
@@ -123,8 +123,8 @@ function Courses(props) {
                   'name': (item) => {
                     return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.title} </td>
                   },
-                  'description': (item) => {
-                    return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.description} </td>
+                  'overview': (item) => {
+                    return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.overview} </td>
                   },
                   'categories_id': (item) => {
                     return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.categories_id.name} </td>

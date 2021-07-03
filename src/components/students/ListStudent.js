@@ -19,7 +19,6 @@ const fieldsTutor = [
     { key: 'id', label: 'STT', sorter: false, filter: false },
     { key: 'name', label: 'Họ và tên', sorter: false, filter: false },
     { key: 'email', label: 'Email', sorter: false, filter: false },
-    { key: 'education', label: 'Trường đại học', sorter: false, filter: false },
     { key: "created_at", label: 'Ngày tạo', _style: { minWidth: '90px' } },
     { key: "updated_at", label: 'Cập nhật lúc', _style: { minWidth: '90px' } },
     // { key: 'actions', label: 'Hoạt động', _style: { minWidth: '50px' }, filter: false },
@@ -33,7 +32,7 @@ const getShowStatus = isActive => {
     return isActive ? 'Đã duyệt' : 'Chưa duyệt'
 }
 
-function ListTutor(props) {
+function ListStudent(props) {
 
     const [tutors, setTutors] = useState([]);
     const [page, setPage] = useState(1);
@@ -159,8 +158,8 @@ function ListTutor(props) {
     );
 }
 
-ListTutor.propTypes = {
+ListStudent.propTypes = {
 
 };
 
-export default ListTutor;
+export default ListStudent;

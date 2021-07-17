@@ -13,35 +13,34 @@ CurriculumPopup.propTypes = {
 
 };
 
-function CurriculumPopup({ open, onClose }) {
+function CurriculumPopup({ open, onClose, defaultValues }) {
     const history = useHistory();
+    const defaultData = {
+        name: "",
+        parents: defaultValues.parents.map(({ _id, name }, index) => {
+            return { value: _id, label: name }
+        }) || [],
+    }
     const { register, errors, control, handleSubmit, reset } = useForm({
-        defaultValue: null
+        defaultValue: defaultData
     });
 
     const onSubmit = data => {
         const curriculum = pick(data, [
-            'title',
-            'description',
-            'file'
+            'name',
+            'parent',
         ]);
 
         const body = {
-            title: curriculum.title,
-            description: curriculum.description,
-        }
+            name: curriculum.name,
+            parent: curriculum.parent,
+        }        
         reset(null);
-        createCurriculum(body, curriculum.file);
+        createCurriculum(body);
     }
 
-    const createCurriculum = async (body, file) => {
-        const formData = new FormData();
-        formData.append('files', file);
+    const createCurriculum = async (body) => {
         try {
-            const result = await UploadFileCDNService.UploadFile(formData);
-            if (result.status == 201) {
-                body.avatar = result.data[0].url
-            }
             const data = await CurriculumService.CreateCurriculumsTutor(body);
             if (data.status == 201) {
                 swal({ title: "Thành công", text: 'Tạo khoá học thành công !', icon: 'success', button: 'Đồng ý' })
@@ -65,7 +64,7 @@ function CurriculumPopup({ open, onClose }) {
                 show={open}
                 onClose={onClose}>
                 <CModalHeader closeButton>
-                    <CModalTitle>Thêm loại giáo trình</CModalTitle>
+                    <CModalTitle>Thêm loại danh mục</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
                     <CForm action="" method="post" encType="multipart/form-data" className="form-horizontal">
@@ -75,67 +74,47 @@ function CurriculumPopup({ open, onClose }) {
                                     <CLabel htmlFor="exampleFormControlInput1">Tên</CLabel>
                                     <Controller
                                         control={control}
-                                        id="title"
-                                        name="title"
-                                        rules={{ required: 'Vui lòng nhập tên giáo trình !' }}
+                                        id="name"
+                                        name="name"
+                                        rules={{ required: 'Vui lòng nhập tên danh mục !' }}
                                         render={({ onChange, value }) => (
                                             <CInput
                                                 onChange={e => onChange(e.target.value)}
                                                 value={value}
-                                                invalid={!!errors.title}
+                                                invalid={!!errors.name}
                                             />
                                         )}
                                     />
                                     <CInvalidFeedback className="help-block">
-                                        {get(errors, `name.title.message`, '')}
+                                        {get(errors, `name.name.message`, '')}
                                     </CInvalidFeedback>
                                 </div>
 
                                 <div className="mb-3">
-                                    <CLabel htmlFor="exampleFormControlInput1">Mô tả</CLabel>
+                                    <CLabel htmlFor="select">Chọn danh mục</CLabel>
                                     <Controller
                                         control={control}
-                                        id="description"
-                                        name="description"
-                                        rules={{ required: 'Vui lòng nhập mô tả!' }}
-                                        render={({ onChange, value }) => (
-                                            <CTextarea
-                                                rows="5"
-                                                onChange={e => onChange(e.target.value)}
-                                                value={value}
-                                                invalid={!!errors.description}
-                                            />
-                                        )}
-                                    />
+                                        id="parent"
+                                        name="parent"
+                                        rules={{ required: true }}
+                                        render={(props) => (
+                                            <CSelect
+                                                {...props}
+                                                value={props.value}
+                                                onChange={(e) => {
+                                                    props.onChange(e.target.value)
+                                                }}
+                                                invalid={!!errors.type}>
+                                                {defaultData.parents && defaultData.parents.map(({ value, label }, index) => (
+                                                    <option key={index} value={value} label={label}>
+                                                        {label}
+                                                    </option>
+                                                ))}
+                                            </CSelect>
+                                        )}>
+                                    </Controller>
                                     <CInvalidFeedback className="help-block">
-                                        {get(errors, `name.description.message`, '')}
-                                    </CInvalidFeedback>
-                                </div>
-
-
-                                <div className="mb-3" row>
-                                    <CLabel htmlFor="select">Đặt ảnh đại diện</CLabel>
-                                    <Controller
-                                        control={control}
-                                        rules={{ required: 'Vui lòng thêm tệp dữ liệu' }}
-                                        name="file"
-                                        render={({ onChange, value }) => (
-                                            <React.Fragment>
-                                                <CCol xs="12">
-                                                    <CInputFile
-                                                        invalid={!!errors.file}
-                                                        onChange={e => {
-                                                            onChange(e.target.files[0]);
-                                                        }} custom id="custom-file-input" />
-                                                    <CLabel htmlFor="custom-file-input" variant="custom-file">
-                                                        {value ? value.name : 'Tải ảnh'}
-                                                    </CLabel>
-                                                </CCol>
-                                            </React.Fragment>
-                                        )}
-                                    />
-                                    <CInvalidFeedback className="help-block">
-                                        {get(errors, `name.file.message`, '')}
+                                        {get(errors, `name.parent`, '')}
                                     </CInvalidFeedback>
                                 </div>
                             </CCol>

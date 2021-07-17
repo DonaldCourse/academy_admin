@@ -10,8 +10,8 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Quản lí giáo trình',
-    to: '/curriculums',
+    name: 'Quản lí danh mục',
+    to: '/categories',
     icon: <CIcon name="cil-inbox" customClasses="c-sidebar-nav-icon" />,
   },
   {
@@ -32,29 +32,29 @@ const _nav = [
       },
     ],
   },
-  {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Quản lí mã giảm giá',
-    route: '/promotions',
-    icon: 'cil-bookmark',
-    _children: [
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Danh sách mã giảm giá',
-        to: '/promotions',
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Loại giảm giá',
-        to: '/promotion-types',
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Đơn vị giảm giá',
-        to: '/promotion-discounts',
-      },
-    ],
-  },
+  // {
+  //   _tag: 'CSidebarNavDropdown',
+  //   name: 'Quản lí mã giảm giá',
+  //   route: '/promotions',
+  //   icon: 'cil-bookmark',
+  //   _children: [
+  //     {
+  //       _tag: 'CSidebarNavItem',
+  //       name: 'Danh sách mã giảm giá',
+  //       to: '/promotions',
+  //     },
+  //     {
+  //       _tag: 'CSidebarNavItem',
+  //       name: 'Loại giảm giá',
+  //       to: '/promotion-types',
+  //     },
+  //     {
+  //       _tag: 'CSidebarNavItem',
+  //       name: 'Đơn vị giảm giá',
+  //       to: '/promotion-discounts',
+  //     },
+  //   ],
+  // },
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lí giáo viên',
@@ -68,10 +68,16 @@ const _nav = [
       },
       {
         _tag: 'CSidebarNavItem',
-        name: 'Danh sách giáo viên chờ duyệt',
-        to: '/tutors/waiting',
+        name: 'Thêm giáo viên',
+        to: '/tutors/add',
       },
     ],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lí học viên',
+    to: '/students',
+    icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
   },
 ]
 

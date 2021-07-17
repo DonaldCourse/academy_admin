@@ -37,7 +37,7 @@ const getLessonVideo = (params) => {
 };
 
 const ActionPublishCourse = (params, data) => {
-  return postAPI(`api/admin/courses/${params}/published`, data)
+  return postAPI(`api/admin/courses/${params}`, data)
 }
 
 export default {

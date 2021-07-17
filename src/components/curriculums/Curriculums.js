@@ -13,10 +13,9 @@ Curriculums.propTypes = {
 };
 
 const fieldsType = [
-    { key: 'id', label: 'STT', sorter: false, filter: false },
-    { key: 'title', label: 'Tên' },
-    { key: 'description', label: 'Mô tả' },
-    { key: 'avatar', label: 'Ảnh', _style: { minWidth: '130px' }, sorter: false, filter: false },
+    { key: '_id', label: 'STT', sorter: false, filter: false },
+    { key: 'name', label: 'Tên' },
+    { key: 'parent', label: 'Danh mục cha' },
     { key: 'actions', label: 'Hoạt động', _style: { minWidth: '50px' }, filter: false },
 ]
 
@@ -32,7 +31,7 @@ function Curriculums(props) {
     const getPromotionType = () => {
         CurriculumService.GetCurriculumsTutor().then(res => {
             if (res.status == 200) {
-                setCurriculums(res.data);
+                setCurriculums(res.data.data);
             }
         }).catch(err => {
 
@@ -79,19 +78,14 @@ function Curriculums(props) {
                                 itemsPerPage={100}
                                 pagination
                                 scopedSlots={{
-                                    'id': (item, index) => {
-                                        return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {index + 1} </td>
+                                    '_id': (item, index) => {
+                                        return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item._id} </td>
                                     },
-                                    'title': (item) => {
-                                        return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.title} </td>
+                                    'name': (item) => {
+                                        return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.name} </td>
                                     },
-                                    'description': (item) => {
-                                        return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.description} </td>
-                                    },
-                                    'avatar': (item) => {
-                                        return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}>
-                                            <img style={{ width: 100, height: 100 }} src={item.avatar}></img>
-                                        </td>
+                                    'parent': (item) => {
+                                        return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.parent} </td>
                                     },
                                     'actions':
                                         (item, index) => {
@@ -112,7 +106,7 @@ function Curriculums(props) {
 
             <CurriculumPopup open={openCurriculumPopup}
                 onClose={onCloseCurriculumPopup}
-                defaultValue={defaultValue}>
+                defaultValues={{ parents: curriculums }}>
             </CurriculumPopup>
 
             <CurriculumEditPopup open={openCurriculumEditPopup}

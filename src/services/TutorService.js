@@ -16,9 +16,14 @@ const ApproveTutor = (tutorID, body) => {
     return putAPI(`/api/admin/tutors/${tutorID}`, body);
 }
 
+const RegisterTutor = (body) => {
+    return postAPI(`/api/auth/tutor/register`, body);
+}
+
 export default {
     GetAllTutor,
     GetAllTutorWaiting,
     ApproveTutor,
-    GetAllTutorApproved
+    GetAllTutorApproved,
+    RegisterTutor
 };

@@ -32,9 +32,9 @@ Courses.propTypes = {};
 const fieldsCourses = [
   { key: 'id', label: 'STT', sorter: false, filter: false },
   { key: 'name', label: 'Tên khoá học', sorter: false, filter: false },
-  { key: 'title', label: 'Danh mục', _style: { minWidth: '130px' }, sorter: false, filter: false },
-  { key: 'description', label: 'Mô tả', _style: { minWidth: '130px' }, sorter: false, filter: false },
-  { key: 'tutor', label: 'Giáo viên' },
+  { key: 'categories_id', label: 'Danh mục', _style: { minWidth: '130px' }, sorter: false, filter: false },
+  { key: 'overview', label: 'Tổng quan', _style: { minWidth: '130px' }, sorter: false, filter: false },
+  { key: 'lecturer_id', label: 'Giáo viên' },
   { key: 'is_published', label: 'Trạng thái', _style: { minWidth: '100px' }, filter: false },
   { key: 'actions', label: 'Hoạt động', _style: { minWidth: '50px' }, filter: false },
 ]
@@ -77,9 +77,9 @@ function Courses(props) {
     setLoading(true);
     const body = {
       is_published: !item.is_published,
-      courseID: item.id
+      courseID: item._id
     }
-    CourseServices.ActionPublishCourse(item.id, body).then(res => {
+    CourseServices.ActionPublishCourse(item._id, body).then(res => {
       setLoading(false);
       window.location.reload();
     }).catch(err => {
@@ -120,14 +120,17 @@ function Courses(props) {
                   'id': (item, index) => {
                     return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {index + 1} </td>
                   },
-                  'title': (item) => {
+                  'name': (item) => {
                     return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.title} </td>
                   },
-                  'description': (item) => {
-                    return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.description} </td>
+                  'overview': (item) => {
+                    return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.overview} </td>
                   },
-                  'tutor': (item) => {
-                    return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.first_name + " " + item.last_name} </td>
+                  'categories_id': (item) => {
+                    return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.categories_id.name} </td>
+                  },
+                  'lecturer_id': (item) => {
+                    return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.lecturer_id.user_id} </td>
                   },
                   'is_published':
                     (item) => (

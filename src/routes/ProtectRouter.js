@@ -21,7 +21,7 @@ function ProtectRouter({ component: Component, redirectTo, ...rest }) {
             {...rest}
             render={(props) =>
                 auth.role ? (
-                    (auth.role == 2) ? (
+                    (auth.role == "administrator") ? (
                         redirectTo ?
                             <Redirect
                                 to={{

@@ -48,7 +48,7 @@ function Curriculums(props) {
     }
 
     const updateCurriculum = (item) => {
-        setDefaultValue({title: item.title, description: item.description, file: item.avatar});
+        setDefaultValue({ name: item.name, parent: item.parent, id: item._id });
         setOpenCurriculumEditPopup(!openCurriculumEditPopup);
     }
     return (
@@ -111,7 +111,7 @@ function Curriculums(props) {
 
             <CurriculumEditPopup open={openCurriculumEditPopup}
                 onClose={onCloseCurriculumEditPopup}
-                defaultValue={defaultValue}>
+                defaultValues={defaultValue}>
             </CurriculumEditPopup>
         </div>
     );

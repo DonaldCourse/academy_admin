@@ -1,51 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { CButton, CCol, CForm, CInput, CInvalidFeedback, CLabel, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CSelect, CSwitch, CTextarea, CInputFile } from '@coreui/react';
 import { Controller, useForm } from 'react-hook-form';
 import { get, pick } from 'lodash';
 import { useHistory } from 'react-router';
 import swal from 'sweetalert';
-import UploadFileCDNService from '../../services/UploadFileCDNService';
 import CurriculumService from '../../services/CurriculumService';
-import { reset } from 'enzyme/build/configuration';
 
 CurriculumEditPopup.propTypes = {
 
 };
 
-function CurriculumEditPopup({ open, onClose }) {
+function CurriculumEditPopup({ open, onClose, defaultValues }) {
     const history = useHistory();
-    const { register, errors, control, handleSubmit, reset } = useForm({
-        defaultValue: null
+    const { register, errors, control, handleSubmit, reset, setValue } = useForm({
+        defaultValue: defaultValues
     });
+    const [curriculums, setCurriculum] = useState([]);
+
+    useEffect(() => {
+        getCurriculum();
+    }, []);
+
+    useEffect(() => {
+        setValue("name", defaultValues.name);
+        setValue("parent", defaultValues.parent);
+    }, [defaultValues]);
 
     const onSubmit = data => {
         const curriculum = pick(data, [
-            'title',
-            'description',
-            'file'
+            'name',
+            'parent',
         ]);
 
         const body = {
-            title: curriculum.title,
-            description: curriculum.description,
+            name: curriculum.name,
+            parent_id: curriculum.parent,
         }
         reset(null);
-        createCurriculum(body, curriculum.file);
+        updateCurriculum(body);
     }
 
-    const createCurriculum = async (body, file) => {
-        const formData = new FormData();
-        formData.append('files', file);
+    const updateCurriculum = async (body) => {
         try {
-            const result = await UploadFileCDNService.UploadFile(formData);
-            if (result.status == 201) {
-                body.avatar = result.data[0].url
-            }
-            const data = await CurriculumService.CreateCurriculumsTutor(body);
-            if (data.status == 201) {
-                swal({ title: "Thành công", text: 'Tạo khoá học thành công !', icon: 'success', button: 'Đồng ý' })
-                window.location.reload();
+            const data = await CurriculumService.UpdateCurriculum(defaultValues.id, body);
+            if (data.status == 200) {
+                swal({ title: "Thành công", text: 'Tạo khoá học thành công !', icon: 'success', button: 'Đồng ý' }).then(res => {
+                    onClose();
+                    window.location.reload();
+                })
             } else {
                 swal({ title: "Lỗi", text: 'Tạo khoá học thất bại !', icon: 'error', button: 'Đồng ý' })
             }
@@ -53,6 +56,21 @@ function CurriculumEditPopup({ open, onClose }) {
             swal({ title: "Lỗi", text: 'Tạo khoá học thất bại !', icon: 'error', button: 'Đồng ý' })
         }
     }
+
+    const getCurriculum = () => {
+        CurriculumService.GetCurriculumsTutor()
+            .then(res => {
+                if (res.status == 200) {
+                    const newArray = res.data.data && res.data.data.map(({ _id, name }) => {
+                        return { value: _id, label: name }
+                    });
+                    setCurriculum(newArray);
+                }
+            }).catch(err => {
+
+            })
+    }
+
 
     const onHandleClose = () => {
         onClose();
@@ -75,67 +93,48 @@ function CurriculumEditPopup({ open, onClose }) {
                                     <CLabel htmlFor="exampleFormControlInput1">Tên</CLabel>
                                     <Controller
                                         control={control}
-                                        id="title"
-                                        name="title"
+                                        id="name"
+                                        name="name"
                                         rules={{ required: 'Vui lòng nhập tên giáo trình !' }}
                                         render={({ onChange, value }) => (
                                             <CInput
                                                 onChange={e => onChange(e.target.value)}
                                                 value={value}
-                                                invalid={!!errors.title}
+                                                invalid={!!errors.name}
                                             />
                                         )}
                                     />
                                     <CInvalidFeedback className="help-block">
-                                        {get(errors, `name.title.message`, '')}
+                                        {get(errors, `name.name.message`, '')}
                                     </CInvalidFeedback>
                                 </div>
 
                                 <div className="mb-3">
-                                    <CLabel htmlFor="exampleFormControlInput1">Mô tả</CLabel>
+                                    <CLabel htmlFor="select">Thuộc danh mục</CLabel>
                                     <Controller
                                         control={control}
-                                        id="description"
-                                        name="description"
-                                        rules={{ required: 'Vui lòng nhập mô tả!' }}
-                                        render={({ onChange, value }) => (
-                                            <CTextarea
-                                                rows="5"
-                                                onChange={e => onChange(e.target.value)}
-                                                value={value}
-                                                invalid={!!errors.description}
-                                            />
-                                        )}
-                                    />
+                                        id="parent"
+                                        name="parent"
+                                        rules={{ required: true }}
+                                        defaultValue={curriculums.length > 0 ? curriculums[0].value : ''}
+                                        render={(props) => (
+                                            <CSelect
+                                                {...props}
+                                                value={props.value}
+                                                onChange={(e) => {
+                                                    props.onChange(e.target.value)
+                                                }}
+                                                invalid={!!errors.curriculums}>
+                                                {curriculums && curriculums.map(({ value, label }, index) => (
+                                                    <option key={index} value={value} label={label}>
+                                                        {label}
+                                                    </option>
+                                                ))}
+                                            </CSelect>
+                                        )}>
+                                    </Controller>
                                     <CInvalidFeedback className="help-block">
-                                        {get(errors, `name.description.message`, '')}
-                                    </CInvalidFeedback>
-                                </div>
-
-
-                                <div className="mb-3" row>
-                                    <CLabel htmlFor="select">Đặt ảnh đại diện</CLabel>
-                                    <Controller
-                                        control={control}
-                                        rules={{ required: 'Vui lòng thêm tệp dữ liệu' }}
-                                        name="file"
-                                        render={({ onChange, value }) => (
-                                            <React.Fragment>
-                                                <CCol xs="12">
-                                                    <CInputFile
-                                                        invalid={!!errors.file}
-                                                        onChange={e => {
-                                                            onChange(e.target.files[0]);
-                                                        }} custom id="custom-file-input" />
-                                                    <CLabel htmlFor="custom-file-input" variant="custom-file">
-                                                        {value ? value.name : 'Tải ảnh'}
-                                                    </CLabel>
-                                                </CCol>
-                                            </React.Fragment>
-                                        )}
-                                    />
-                                    <CInvalidFeedback className="help-block">
-                                        {get(errors, `name.file.message`, '')}
+                                        {get(errors, `name.categories.message`, '')}
                                     </CInvalidFeedback>
                                 </div>
                             </CCol>

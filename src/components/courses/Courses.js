@@ -130,7 +130,7 @@ function Courses(props) {
                     return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.categories_id.name} </td>
                   },
                   'lecturer_id': (item) => {
-                    return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.lecturer_id.user_id} </td>
+                    return <td style={{ paddingLeft: '10px', verticalAlign: 'middle' }}> {item.lecturer_id.user_id.name} </td>
                   },
                   'is_published':
                     (item) => (

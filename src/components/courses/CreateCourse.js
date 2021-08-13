@@ -70,7 +70,7 @@ function CreateCourse(props) {
         try {
             const result = await UploadFileCDNService.UploadFile(formData);
             if (result.status == 201) {
-                body.avatar = result.data[0].url
+                body.avatar = result.data[0].path
             }
             const data = await CourseServices.CreateCourse(body);
             if (data.status == 201) {

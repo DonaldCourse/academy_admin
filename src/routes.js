@@ -9,6 +9,9 @@ const ListTutor = React.lazy(() => import('./components/tutors/list-tutors/ListT
 const ListTutorWaiting = React.lazy(() => import('./components/tutors/list-tutor-waiting/ListTutorWaiting'));
 const AddTutor = React.lazy(() => import('./components/tutors/add-tutors/AddTutor'));
 
+const ListStudent = React.lazy(() => import('./components/students/ListStudent'));
+
+
 const Curriculums = React.lazy(() => import('./components/curriculums/Curriculums'));
 const routes = [
   { path: '/', exact: true, name: 'Trang chủ' },
@@ -21,7 +24,8 @@ const routes = [
   { path: '/tutors', exact: true, name: 'Danh sách giáo viên', component: ListTutor },
   { path: '/tutors/add', exact: true, name: 'Thêm giáo viên', component: AddTutor },
   { path: '/tutors/waiting', exact: true, name: 'Mã giảm giá', component: ListTutorWaiting },
-  { path: '/categories', name: 'Danh mục', component: Curriculums }
+  { path: '/categories', name: 'Danh mục', component: Curriculums },
+  { path: '/students', exact: true, name: 'Danh sách học sinh', component: ListStudent },
 ];
 
 export default routes;

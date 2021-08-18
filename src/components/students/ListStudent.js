@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { CBadge, CButton, CCard, CCardBody, CCardHeader, CCol, CDataTable, CRow, CPagination, CTooltip } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import { formatDate } from '../../../utils/datetimeFormatter';
-import TutorService from '../../../services/TutorService';
+import { formatDate } from '../../utils/datetimeFormatter';
 
 // Spinner : Import
 import { css, jsx } from '@emotion/react'
 import HashLoader from "react-spinners/HashLoader";
+import StudentSevices from '../../services/StudentSevices';
 
 const override = css`
     display: block;
@@ -34,7 +34,7 @@ const getShowStatus = isActive => {
 
 function ListStudent(props) {
 
-    const [tutors, setTutors] = useState([]);
+    const [students, setStudents] = useState([]);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [totalPage, setTotalPage] = useState(1);
@@ -42,41 +42,21 @@ function ListStudent(props) {
     const [color, setColor] = useState("#3c4b64");
 
     useEffect(() => {
-        getAllTutor(limit, page);
+        getAllStudent(limit, page);
         return () => {
 
         }
     }, [page])
 
-    const getAllTutor = async (limit, page) => {
-        TutorService.GetAllTutor(limit, page).then(res => {
+    const getAllStudent = async (limit, page) => {
+        StudentSevices.GetAllStudent(limit, page).then(res => {
             if (res.status == 200) {
-                setTutors(res.data.list);
+                setStudents(res.data.list);
                 setTotalPage(res.data.totalPages);
             }
         }).catch(err => {
             
         })
-    }
-
-    const approveTutor = async (id, body) => {
-        setLoading(true);
-        TutorService.ApproveTutor(id, body).then(res => {
-            setLoading(false)
-            if (res.status == 200) {
-                window.location.reload();
-            }
-        }).catch(err => {
-            setLoading(false)
-        })
-    }
-
-    const onHandleOnClick = (id, is_accepted) => {
-        const body = {
-            is_accepted: is_accepted,
-            tutorID: id
-        }
-        approveTutor(id, body)
     }
 
     const pageChange = newPage => {
@@ -92,11 +72,11 @@ function ListStudent(props) {
                 <CCol xs="12" lg="12">
                     <CCard>
                         <CCardHeader>
-                            Danh sách giáo viên
+                            Danh sách học sinh
                         </CCardHeader>
                         <CCardBody>
                             <CDataTable
-                                items={tutors}
+                                items={students}
                                 fields={fieldsTutor}
                                 rowClicked
                                 hover
